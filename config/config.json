@@ -1,28 +1,26 @@
 {
-  
   "development": {
-      "username": "abel",
-      "password": "0512",
-      "database": "oromia",
-      "host": "localhost",
-      "port": 5432,
-      "dialect": "postgres"
-    },
-    "test": {
-      "username": "abel",
-      "password": "0512",
-      "database": "oromia_test",
-      "host": "localhost",
-      "port": 5432,
-      "dialect": "postgres"
-    },
-    "production": {
-      "username": "abel",
-      "password": "0512",
-      "database": "ormia_prod",
-      "host": "localhost",
-      "port": 5432,
-      "dialect": "postgres"
-    }
+    "username": "abel",
+    "password": "0512",
+    "database": "oromia",
+    "host": "localhost",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "abel",
+    "password": "0512",
+    "database": "oromia_test",
+    "host": "localhost",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "abel",
+    "password": "0512",
+    "database": "oromia_prod",
+    "host": "localhost",
+    "port": 5432,
+    "dialect": "postgres"
   }
-  
+}
