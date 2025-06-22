@@ -6,6 +6,674 @@
 	},
 	"item": [
 		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "surname",
+									"value": "Doe",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Ethiopia",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+251912345678",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password123",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "tourist",
+									"type": "text"
+								},
+								{
+									"key": "profile_picture",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"+251912345678\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Updated Name",
+									"type": "text"
+								},
+								{
+									"key": "surname",
+									"value": "Updated Surname",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Updated Country",
+									"type": "text"
+								},
+								{
+									"key": "profile_picture",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"password123\",\n    \"newPassword\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/change-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Checkout Management",
+			"item": [
+				{
+					"name": "Get All Checkouts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkouts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Checkout by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkouts/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Checkout - Valid Data",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Ethiopia",
+									"type": "text"
+								},
+								{
+									"key": "surname",
+									"value": "Doe",
+									"type": "text"
+								},
+								{
+									"key": "accomodation",
+									"value": "Hotel Addis",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+251912345678",
+									"type": "text"
+								},
+								{
+									"key": "no_of_guests",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "has_paid",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "passport",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/checkouts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Checkout - Invalid Phone Number",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Ethiopia",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "invalid-phone",
+									"type": "text"
+								},
+								{
+									"key": "no_of_guests",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/checkouts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Checkout - Duplicate Phone Number",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Jane",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Kenya",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+251912345678",
+									"type": "text"
+								},
+								{
+									"key": "no_of_guests",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/checkouts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Checkout",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John Updated",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Ethiopia",
+									"type": "text"
+								},
+								{
+									"key": "surname",
+									"value": "Doe Updated",
+									"type": "text"
+								},
+								{
+									"key": "accomodation",
+									"value": "Updated Hotel",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+251912345679",
+									"type": "text"
+								},
+								{
+									"key": "no_of_guests",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "has_paid",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "passport",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/checkouts/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Checkout",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkouts/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Checkouts by Payment Status - Paid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkouts/payment-status?has_paid=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts",
+								"payment-status"
+							],
+							"query": [
+								{
+									"key": "has_paid",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Checkouts by Payment Status - Unpaid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkouts/payment-status?has_paid=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts",
+								"payment-status"
+							],
+							"query": [
+								{
+									"key": "has_paid",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Checkouts by Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkouts/search?q=John",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "John"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Checkouts by Country",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkouts/search?q=Ethiopia",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Ethiopia"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Checkout - Minimal Required Fields",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Alice",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "USA",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+1234567890",
+									"type": "text"
+								},
+								{
+									"key": "no_of_guests",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/checkouts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Checkout - Invalid Number of Guests",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Bob",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Canada",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+1987654321",
+									"type": "text"
+								},
+								{
+									"key": "no_of_guests",
+									"value": "25",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/checkouts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Users",
 			"item": [
 				{
@@ -630,6 +1298,10 @@
 		{
 			"key": "baseUrl",
 			"value": "http://localhost:3000/api"
+		},
+		{
+			"key": "authToken",
+			"value": ""
 		}
 	]
 } 

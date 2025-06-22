@@ -4,6 +4,7 @@ const Image = require('../models/Image');
 const User = require('../models/User');
 const Package = require('../models/Package');
 const Reviews = require('../models/Reviews');
+const Checkout = require('../models/Checkout')
 
 async function syncTables() {
     try {
