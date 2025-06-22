@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const Image = require('../models/Image');
+const cloudinary = require('../config/cloudinary');
 
 // Get all users
 exports.getAllUsers = async (req, res) => {
@@ -27,9 +29,24 @@ exports.getUserById = async (req, res) => {
 // Create a new user
 exports.createUser = async (req, res) => {
   try {
-    const newUser = await User.create(req.body);
+    const data = { ...req.body };
+    
+    // Only create image record and set profile_picture_id if file was uploaded
+    if (req.file) {
+      const newImage = await Image.create({
+        image_id: req.file.filename,
+        image_url: req.file.path,
+      });
+      data.profile_picture_id = newImage.id;
+    } else {
+      // Ensure profile_picture_id is null if no file uploaded
+      data.profile_picture_id = null;
+    }
+    
+    const newUser = await User.create(data);
     res.status(201).json(newUser);
   } catch (error) {
+    console.error('Error creating user:', error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -37,9 +54,28 @@ exports.createUser = async (req, res) => {
 // Update a user
 exports.updateUser = async (req, res) => {
   try {
-    const [updated] = await User.update(req.body, {
+    const data = { ...req.body };
+    const user = await User.findByPk(req.params.id);
+
+    if (req.file) {
+      if (user.profile_picture_id) {
+        const oldImage = await Image.findByPk(user.profile_picture_id);
+        if (oldImage) {
+          await cloudinary.uploader.destroy(oldImage.image_id);
+          await oldImage.destroy();
+        }
+      }
+      const newImage = await Image.create({
+        image_id: req.file.filename,
+        image_url: req.file.path,
+      });
+      data.profile_picture_id = newImage.id;
+    }
+
+    const [updated] = await User.update(data, {
       where: { id: req.params.id },
     });
+
     if (updated) {
       const updatedUser = await User.findByPk(req.params.id);
       res.json(updatedUser);

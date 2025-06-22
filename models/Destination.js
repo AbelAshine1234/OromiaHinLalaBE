@@ -25,6 +25,10 @@ const Destination = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    imageId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,

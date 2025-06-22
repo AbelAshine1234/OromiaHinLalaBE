@@ -32,9 +32,15 @@ const Package = sequelize.define('Package', {
         },
         onDelete: 'SET NULL'  
     },
+    
     stay_day: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    amount: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+        defaultValue: 0.00
     },
     start_date: {
         type: DataTypes.DATE,

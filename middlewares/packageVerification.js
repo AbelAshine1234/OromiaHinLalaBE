@@ -5,6 +5,7 @@ const packageSchema = Joi.object({
   tourist_guide_id: Joi.number().integer(),
   reviews_id: Joi.number().integer(),
   stay_day: Joi.number().integer().required(),
+  amount: Joi.number().positive().required(),
   start_date: Joi.date().required(),
   end_date: Joi.date().required(),
 });

@@ -4,7 +4,6 @@ const destinationSchema = Joi.object({
   name: Joi.string().required(),
   description: Joi.string(),
   location: Joi.string(),
-  imageUrl: Joi.string().uri(),
 });
 
 const validateDestination = (req, res, next) => {
