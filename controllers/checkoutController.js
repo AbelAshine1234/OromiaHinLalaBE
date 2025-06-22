@@ -1,6 +1,8 @@
 const Checkout = require('../models/Checkout');
 const Image = require('../models/Image');
 const { Op } = require('sequelize');
+const QRCode = require('qrcode');
+const { sendQrCodeEmail } = require('../config/mailer');
 
 // Get all checkouts
 exports.getAllCheckouts = async (req, res) => {
@@ -62,6 +64,18 @@ exports.createCheckout = async (req, res) => {
       });
     }
     
+    // Check if email already exists
+    const existingEmail = await Checkout.findOne({
+        where: { email: data.email }
+    });
+
+    if (existingEmail) {
+        return res.status(400).json({
+            error: 'Email already exists',
+            details: 'A checkout with this email already exists'
+        });
+    }
+    
     // Handle passport image if uploaded
     if (req.file) {
       const newImage = await Image.create({
@@ -89,7 +103,16 @@ exports.createCheckout = async (req, res) => {
       ]
     });
     
-    res.status(201).json(createdCheckout);
+    // Generate success URL for QR code
+    const successUrl = `${req.protocol}://${req.get('host')}/api/checkouts/success/${encodeURIComponent(createdCheckout.email)}`;
+
+    // Generate QR code as a buffer
+    const qrCodeBuffer = await QRCode.toBuffer(successUrl);
+
+    // Send QR code email
+    await sendQrCodeEmail(createdCheckout.email, qrCodeBuffer);
+
+    res.status(201).json({ checkout: createdCheckout, successUrl });
   } catch (error) {
     console.error('Error creating checkout:', error);
     
@@ -102,7 +125,7 @@ exports.createCheckout = async (req, res) => {
       });
     }
     
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -233,6 +256,52 @@ exports.getCheckoutsByPaymentStatus = async (req, res) => {
   } catch (error) {
     console.error('Error fetching checkouts by payment status:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Verify checkout success by email
+exports.verifyCheckoutSuccess = async (req, res) => {
+  try {
+    const checkout = await Checkout.findOne({
+      where: { email: req.params.email },
+      include: [
+        {
+          model: Image,
+          as: 'passportImage',
+          attributes: ['id', 'image_url']
+        }
+      ]
+    });
+
+    if (checkout) {
+      res.send(`
+        <html>
+          <head>
+            <title>Checkout Successful</title>
+            <style>
+              body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+              h1 { color: #4CAF50; }
+              .details { margin: 20px auto; padding: 20px; border: 1px solid #ddd; max-width: 400px; }
+            </style>
+          </head>
+          <body>
+            <h1>Checkout Successful!</h1>
+            <div class="details">
+              <p><strong>Name:</strong> ${checkout.name} ${checkout.surname || ''}</p>
+              <p><strong>Country:</strong> ${checkout.country}</p>
+              <p><strong>Phone:</strong> ${checkout.phone_number}</p>
+              <p><strong>Guests:</strong> ${checkout.no_of_guests}</p>
+              <p><strong>Paid:</strong> ${checkout.has_paid ? 'Yes' : 'No'}</p>
+            </div>
+          </body>
+        </html>
+      `);
+    } else {
+      res.status(404).send('<h1>Checkout Not Found</h1>');
+    }
+  } catch (error) {
+    console.error('Error verifying checkout:', error);
+    res.status(500).send('<h1>Internal Server Error</h1>');
   }
 };
 

@@ -79,6 +79,7 @@ Creates a new checkout record.
 
 **Form Data:**
 - `name` (string, required, 2-50 chars): Customer's first name
+- `email` (string, required, unique): Customer's email address
 - `country` (string, required, 2-50 chars): Customer's country
 - `surname` (string, optional, 2-50 chars): Customer's surname
 - `accomodation` (string, optional, 2-100 chars): Accommodation details
@@ -90,32 +91,37 @@ Creates a new checkout record.
 **Validation Rules:**
 - Phone number must be in international format (e.g., +251912345678)
 - Phone number must be unique across all checkouts
+- Email must be a valid format and unique
 - Number of guests must be between 1 and 20
 - Name and country are required fields
 
 **Success Response (201):**
 ```json
 {
-  "id": 1,
-  "name": "John",
-  "country": "Ethiopia",
-  "surname": "Doe",
-  "accomodation": "Hotel Addis",
-  "phone_number": "+251912345678",
-  "has_paid": false,
-  "no_of_guests": 2,
-  "passport": 1,
-  "createdAt": "2024-01-01T00:00:00.000Z",
-  "updatedAt": "2024-01-01T00:00:00.000Z",
-  "passportImage": {
+  "checkout": {
     "id": 1,
-    "image_url": "/uploads/passport_123.jpg"
-  }
+    "name": "John",
+    "email": "john.doe@example.com",
+    "country": "Ethiopia",
+    "surname": "Doe",
+    "accomodation": "Hotel Addis",
+    "phone_number": "+251912345678",
+    "has_paid": false,
+    "no_of_guests": 2,
+    "passport": 1,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "passportImage": {
+      "id": 1,
+      "image_url": "/uploads/passport_123.jpg"
+    }
+  },
+  "successUrl": "http://localhost:3000/api/checkouts/success/john.doe%40example.com"
 }
 ```
 
 **Error Responses:**
-- `400 Bad Request`: Validation errors or duplicate phone number
+- `400 Bad Request`: Validation errors, duplicate phone number or email
 - `500 Internal Server Error`: Server errors
 
 ### 4. Update Checkout
@@ -163,7 +169,18 @@ Deletes a checkout record and its associated passport image.
 
 **Error Response (404):** Checkout not found
 
-### 6. Get Checkouts by Payment Status
+### 6. Verify Checkout Success
+**GET** `/api/checkouts/success/:email`
+
+This endpoint is intended to be accessed by scanning the QR code generated upon successful checkout. It displays a confirmation page with the checkout details.
+
+**Parameters:**
+- `email` (string, required): The user's email from the QR code URL.
+
+**Response:**
+An HTML page confirming the successful checkout.
+
+### 7. Get Checkouts by Payment Status
 **GET** `/api/checkouts/payment-status`
 
 Filters checkouts by payment status.
@@ -194,17 +211,17 @@ GET /api/checkouts/payment-status?has_paid=true
 ]
 ```
 
-### 7. Search Checkouts
+### 8. Search Checkouts
 **GET** `/api/checkouts/search`
 
-Searches checkouts by name, country, or surname.
+Searches checkouts by name, country, surname, or accommodation.
 
 **Query Parameters:**
 - `q` (string, required): Search query
 
 **Example:**
 ```
-GET /api/checkouts/search?q=John
+GET /api/checkouts/search?q=Hotel
 ```
 
 **Response:**
@@ -230,6 +247,7 @@ GET /api/checkouts/search?q=John
 
 ### Required Fields
 - `name`: String, 2-50 characters
+- `email`: String, valid email format, unique
 - `country`: String, 2-50 characters
 - `phone_number`: String, international format, unique
 - `no_of_guests`: Integer, 1-20
@@ -239,6 +257,10 @@ GET /api/checkouts/search?q=John
 - `accomodation`: String, 2-100 characters
 - `has_paid`: Boolean (defaults to false)
 - `passport`: File upload
+
+### Email Format
+- Must be a valid email format
+- Must be unique across all checkouts
 
 ### Phone Number Format
 - Must be in international format
@@ -255,11 +277,11 @@ GET /api/checkouts/search?q=John
 }
 ```
 
-### Duplicate Phone Number (400)
+### Duplicate Phone Number or Email (400)
 ```json
 {
-  "error": "Phone number already exists",
-  "details": "A checkout with this phone number already exists"
+  "error": "Email already exists",
+  "details": "A checkout with this email already exists"
 }
 ```
 
@@ -289,6 +311,7 @@ GET /api/checkouts/search?q=John
 ```bash
 curl -X POST \
   -F "name=John" \
+  -F "email=john.doe@example.com" \
   -F "country=Ethiopia" \
   -F "phone_number=+251912345678" \
   -F "no_of_guests=2" \
@@ -305,6 +328,7 @@ CREATE TABLE "Checkouts" (
   "name" VARCHAR(255) NOT NULL,
   "country" VARCHAR(255) NOT NULL,
   "surname" VARCHAR(255),
+  "email" VARCHAR(255) UNIQUE NOT NULL,
   "accomodation" VARCHAR(255),
   "phone_number" VARCHAR(255) UNIQUE NOT NULL,
   "has_paid" BOOLEAN DEFAULT false,

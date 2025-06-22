@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 const checkoutSchema = Joi.object({
   name: Joi.string().required().min(2).max(50),
+  email: Joi.string().email().required(),
   country: Joi.string().required().min(2).max(50),
   surname: Joi.string().optional().min(2).max(50),
   accomodation: Joi.string().optional().min(2).max(100),

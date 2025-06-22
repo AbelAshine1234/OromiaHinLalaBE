@@ -8,6 +8,7 @@ const upload = require('../middlewares/upload');
 router.get('/', checkoutController.getAllCheckouts);
 router.get('/search', checkoutController.searchCheckouts);
 router.get('/payment-status', checkoutController.getCheckoutsByPaymentStatus);
+router.get('/success/:email', checkoutController.verifyCheckoutSuccess);
 router.get('/:id', checkoutController.getCheckoutById);
 router.post('/', upload.single('passport'), validateCheckout, checkoutController.createCheckout);
 router.put('/:id', upload.single('passport'), validateCheckout, checkoutController.updateCheckout);

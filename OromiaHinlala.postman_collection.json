@@ -278,6 +278,11 @@
 									"type": "text"
 								},
 								{
+									"key": "email",
+									"value": "john.doe@example.com",
+									"type": "text"
+								},
+								{
 									"key": "country",
 									"value": "Ethiopia",
 									"type": "text"
@@ -581,6 +586,30 @@
 								{
 									"key": "q",
 									"value": "Ethiopia"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Checkouts by Accommodation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkouts/search?q=Hotel",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"checkouts",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Hotel"
 								}
 							]
 						}

@@ -9,7 +9,6 @@ const Checkout = require("../models/Checkout");
 async function truncateTables() {
   try {
     // Disable FK checks - adjust for your DB dialect (this example is for MySQL)
-    await sequelize.query("SET FOREIGN_KEY_CHECKS = 0");
 
     // Truncate tables explicitly
     await Destination.truncate({ cascade: true });
@@ -20,7 +19,6 @@ async function truncateTables() {
     await Checkout.truncate({ cascade: true });
 
     // Re-enable FK checks
-    await sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
 
     console.log("All tables truncated successfully!");
   } catch (error) {
